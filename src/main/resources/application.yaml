@@ -1,0 +1,81 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: delivery-app
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+  jpa:
+    show-sql: false
+    properties:
+      format_sql: false
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: validate
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/delivery?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+
+  # Thymeleaf 설정 (Store-Admin용)
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+
+  # 정적 리소스 설정
+  web:
+    resources:
+      static-locations: classpath:/static/
+      cache:
+        cachecontrol:
+          max-age: 86400
+          cache-public: true
+
+token:
+  secret:
+    key: SpringBootJWTHelperTokenSecretKeyValue123!@#
+  access-token:
+    plus-hour: 1
+  refresh-token:
+    plus-hour: 12
+
+# 로깅 설정
+logging:
+  level:
+    org.delivery: INFO
+    org.springframework.security: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: heroku
+
+  jpa:
+    show-sql: false
+    properties:
+      format_sql: false
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+
+token:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+logging:
+  level:
+    org.delivery: INFO
+    org.hibernate.SQL: WARN

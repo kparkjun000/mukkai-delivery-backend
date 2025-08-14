@@ -1,0 +1,34 @@
+spring:
+  rabbitmq:
+    host: ${CLOUDAMQP_HOST:localhost}
+    port: ${CLOUDAMQP_PORT:5672}
+    username: ${CLOUDAMQP_USERNAME:admin}
+    password: ${CLOUDAMQP_PASSWORD:1234}
+    virtual-host: ${CLOUDAMQP_VHOST:/}
+
+  jpa:
+    show-sql: false
+    properties:
+      format_sql: false
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${JAWSDB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: ${PORT:8080}
+
+token:
+  secret:
+    key: ${JWT_SECRET_KEY:SpringBootJWTHelperTokenSecretKeyValue123!@#}
+  access-token:
+    plus-hour: 1
+  refresh-token:
+    plus-hour: 12
+
+logging:
+  level:
+    org.delivery: INFO
+    org.hibernate.SQL: WARN
