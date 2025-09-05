@@ -1,0 +1,36 @@
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:1234}
+
+  jpa:
+    show-sql: false
+    properties:
+      format_sql: true
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+
+token:
+  secret:
+    key: ${JWT_SECRET_KEY:SpringBootJWTHelperTokenSecretKeyValue123!@#}
+  access-token:
+    plus-hour: 1
+  refresh-token:
+    plus-hour: 12
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    root: INFO
+    org.delivery: DEBUG
