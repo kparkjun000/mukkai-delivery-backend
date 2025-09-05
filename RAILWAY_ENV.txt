@@ -1,0 +1,12 @@
+# Railway Environment Variables
+# Copy these to Railway Dashboard → Variables
+
+# CloudAMQP Configuration
+CLOUDAMQP_HOST=fuji.lmq.cloudamqp.com
+CLOUDAMQP_PORT=5672
+CLOUDAMQP_USERNAME=cmlkllul
+CLOUDAMQP_PASSWORD=e5ow8Xv_2qpOYntJCIlkeEtt9krBu68F
+CLOUDAMQP_VHOST=cmlkllul
+
+# Database (자동 생성됨)
+# DATABASE_URL=postgresql://... (Railway가 자동 제공)
