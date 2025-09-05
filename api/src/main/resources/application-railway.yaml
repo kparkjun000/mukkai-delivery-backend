@@ -1,9 +1,10 @@
 spring:
   rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:admin}
-    password: ${RABBITMQ_PASSWORD:1234}
+    host: ${CLOUDAMQP_HOST:localhost}
+    port: ${CLOUDAMQP_PORT:5672}
+    username: ${CLOUDAMQP_USERNAME:admin}
+    password: ${CLOUDAMQP_PASSWORD:1234}
+    virtual-host: ${CLOUDAMQP_VHOST:/}
 
   jpa:
     show-sql: false
@@ -21,7 +22,7 @@ spring:
 
 token:
   secret:
-    key: ${JWT_SECRET_KEY:SpringBootJWTHelperTokenSecretKeyValue123!@#}
+    key: SpringBootJWTHelperTokenSecretKeyValue123!@#
   access-token:
     plus-hour: 1
   refresh-token:
