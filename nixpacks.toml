@@ -1,8 +1,11 @@
 [phases.setup]
 nixPkgs = ["jdk11", "gradle"]
 
+[phases.install]
+cmds = ["chmod +x gradlew"]
+
 [phases.build]
-cmds = ["./gradlew build -x test"]
+cmds = ["./gradlew build -x test --no-daemon"]
 
 [start]
 cmd = "java -Dserver.port=$PORT -Dspring.profiles.active=railway -jar build/libs/delivery-app.jar"
