@@ -1,10 +1,19 @@
 spring:
+  datasource:
+    continue-on-error: true
+    
   rabbitmq:
     host: ${CLOUDAMQP_HOST:localhost}
     port: ${CLOUDAMQP_PORT:5672}
     username: ${CLOUDAMQP_USERNAME:admin}
     password: ${CLOUDAMQP_PASSWORD:1234}
     virtual-host: ${CLOUDAMQP_VHOST:/}
+    connection-timeout: 30000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 3000
+        max-attempts: 3
 
   jpa:
     show-sql: false
@@ -18,11 +27,15 @@ spring:
     url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 3
+      maximum-pool-size: 2
       minimum-idle: 1
-      connection-timeout: 30000
-      idle-timeout: 300000
-      max-lifetime: 900000
+      connection-timeout: 60000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+      initialization-fail-timeout: -1
 
 token:
   secret:
