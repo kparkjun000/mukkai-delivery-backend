@@ -1,7 +1,4 @@
 spring:
-  datasource:
-    continue-on-error: true
-    
   rabbitmq:
     host: ${CLOUDAMQP_HOST:localhost}
     port: ${CLOUDAMQP_PORT:5672}
@@ -19,23 +16,30 @@ spring:
     show-sql: false
     properties:
       format_sql: true
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
   
   datasource:
     url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
+    continue-on-error: true
     hikari:
-      maximum-pool-size: 2
-      minimum-idle: 1
-      connection-timeout: 60000
-      idle-timeout: 600000
-      max-lifetime: 1800000
-      validation-timeout: 5000
+      maximum-pool-size: 1
+      minimum-idle: 0
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 600000
+      validation-timeout: 3000
       connection-test-query: SELECT 1
-      leak-detection-threshold: 60000
       initialization-fail-timeout: -1
+      auto-commit: true
 
 token:
   secret:
