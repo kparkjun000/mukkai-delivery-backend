@@ -17,10 +17,8 @@ spring:
     hibernate:
       ddl-auto: ${DDL_AUTO:create}
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/delivery}
-    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASS:1234}
+    url: jdbc:postgresql://trolley.proxy.rlwy.net:30915/railway?user=postgres&password=nHdxFHgzdkBLEFhdubLgEpOwoEMwbXOn
+    driver-class-name: org.postgresql.Driver
 
 token:
   secret:
