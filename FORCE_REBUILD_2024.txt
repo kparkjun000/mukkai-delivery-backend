@@ -1,0 +1,4 @@
+Force Railway to rebuild from scratch
+Timestamp: 2025-09-06 12:35:00
+Previous builds are using cached MySQL driver
+Must use PostgreSQL driver instead
