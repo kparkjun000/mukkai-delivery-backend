@@ -1,3 +1,6 @@
+hibernate:
+  dialect: org.hibernate.dialect.PostgreSQLDialect
+
 spring:
   rabbitmq:
     host: ${CLOUDAMQP_HOST:localhost}
@@ -34,9 +37,10 @@ spring:
     url: ${DATABASE_URL}
     driver-class-name: org.postgresql.Driver
     continue-on-error: true
+    platform: postgresql
     hikari:
-      maximum-pool-size: 1
-      minimum-idle: 0
+      maximum-pool-size: 2
+      minimum-idle: 1
       connection-timeout: 20000
       idle-timeout: 300000
       max-lifetime: 600000
