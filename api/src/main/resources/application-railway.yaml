@@ -13,6 +13,8 @@ spring:
         show_sql: true
         format_sql: true
 
+debug: true
+
 token:
   secret:
     key: SpringBootJWTHelperTokenSecretKeyValue123!@#
@@ -26,5 +28,7 @@ server:
 
 logging:
   level:
-    root: INFO
-    org.delivery: DEBUG
+    root: DEBUG
+    org.hibernate: DEBUG
+    org.springframework.jdbc: DEBUG
+    com.zaxxer.hikari: DEBUG
