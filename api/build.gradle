@@ -51,9 +51,10 @@ test {
 }
 
 bootJar {
-    enabled = false
+    enabled = true
+    archiveFileName = 'api-app.jar'
 }
 
 jar {
-    enabled = true
+    enabled = false
 }
