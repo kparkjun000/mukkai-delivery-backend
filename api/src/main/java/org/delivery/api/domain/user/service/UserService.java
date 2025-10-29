@@ -25,7 +25,29 @@ public class UserService {
 
     public UserEntity register(UserEntity userEntity){
         return Optional.ofNullable(userEntity)
-            .map(it ->{
+            .map(it -> {
+                // 동일한 이메일로 기존 계정이 있는지 확인 (삭제된 계정 포함)
+                var existingUser = userRepository.findFirstByEmailOrderByIdDesc(userEntity.getEmail());
+                
+                if (existingUser.isPresent()) {
+                    var existing = existingUser.get();
+                    
+                    // UNREGISTERED 상태면 재활성화
+                    if (existing.getStatus() == UserStatus.UNREGISTERED) {
+                        existing.setStatus(UserStatus.REGISTERED);
+                        existing.setRegisteredAt(LocalDateTime.now());
+                        existing.setUnregisteredAt(null);
+                        existing.setName(userEntity.getName());
+                        existing.setPassword(userEntity.getPassword());
+                        existing.setAddress(userEntity.getAddress());
+                        return userRepository.save(existing);
+                    } else {
+                        // REGISTERED 상태면 에러
+                        throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이미 사용 중인 이메일입니다.");
+                    }
+                }
+                
+                // 신규 계정 생성
                 userEntity.setStatus(UserStatus.REGISTERED);
                 userEntity.setRegisteredAt(LocalDateTime.now());
                 return userRepository.save(userEntity);
