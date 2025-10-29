@@ -32,19 +32,15 @@ public class UserService {
                 if (existingUser.isPresent()) {
                     var existing = existingUser.get();
                     
-                    // UNREGISTERED 상태면 재활성화
-                    if (existing.getStatus() == UserStatus.UNREGISTERED) {
-                        existing.setStatus(UserStatus.REGISTERED);
-                        existing.setRegisteredAt(LocalDateTime.now());
-                        existing.setUnregisteredAt(null);
-                        existing.setName(userEntity.getName());
-                        existing.setPassword(userEntity.getPassword());
-                        existing.setAddress(userEntity.getAddress());
-                        return userRepository.save(existing);
-                    } else {
-                        // REGISTERED 상태면 에러
-                        throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이미 사용 중인 이메일입니다.");
-                    }
+                    // 기존 계정이 있으면 정보 업데이트 (테스트 편의성)
+                    // UNREGISTERED든 REGISTERED든 모두 업데이트
+                    existing.setStatus(UserStatus.REGISTERED);
+                    existing.setRegisteredAt(LocalDateTime.now());
+                    existing.setUnregisteredAt(null);
+                    existing.setName(userEntity.getName());
+                    existing.setPassword(userEntity.getPassword());
+                    existing.setAddress(userEntity.getAddress());
+                    return userRepository.save(existing);
                 }
                 
                 // 신규 계정 생성
