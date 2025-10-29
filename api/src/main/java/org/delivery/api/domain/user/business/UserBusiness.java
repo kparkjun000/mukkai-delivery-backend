@@ -69,4 +69,17 @@ public class UserBusiness {
         var response = userConverter.toResponse(userEntity);
         return response;
     }
+
+    /**
+     * 계정 삭제 처리
+     * Apple App Store 가이드라인 5.1.1(v) 준수
+     * 
+     * 1. 사용자 확인
+     * 2. 사용자 상태를 UNREGISTERED로 변경
+     * 3. unregisteredAt 시간 기록
+     * 4. 관련 데이터 처리 (주문 내역 등)
+     */
+    public void deleteAccount(User user) {
+        userService.deleteAccount(user.getId());
+    }
 }

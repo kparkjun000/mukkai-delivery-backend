@@ -60,4 +60,29 @@ public class UserService {
             UserStatus.REGISTERED
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
     }
+
+    /**
+     * 계정 삭제 (소프트 삭제)
+     * Apple App Store 가이드라인 5.1.1(v) 준수
+     * 
+     * 사용자 계정을 UNREGISTERED 상태로 변경하고 unregisteredAt 시간을 기록합니다.
+     * 실제 데이터는 삭제하지 않고 상태만 변경합니다 (법적 요구사항 준수).
+     * 
+     * @param userId 삭제할 사용자 ID
+     * @throws ApiException 사용자를 찾을 수 없는 경우
+     */
+    public void deleteAccount(Long userId) {
+        var userEntity = getUserWithThrow(userId);
+        
+        // 사용자 상태를 UNREGISTERED로 변경
+        userEntity.setStatus(UserStatus.UNREGISTERED);
+        userEntity.setUnregisteredAt(LocalDateTime.now());
+        
+        // 변경사항 저장
+        userRepository.save(userEntity);
+        
+        // TODO: 추가로 삭제가 필요한 데이터가 있다면 여기서 처리
+        // 예: 알림 설정, 캐시된 데이터 등
+        // 주의: 주문 내역은 법적 요구사항에 따라 보관해야 할 수 있음
+    }
 }
