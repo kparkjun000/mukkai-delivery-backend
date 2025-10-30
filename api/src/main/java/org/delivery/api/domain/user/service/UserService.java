@@ -49,8 +49,27 @@ public class UserService {
         String email,
         String password
     ){
-        var entity = getUserWithThrow(email, password);
-        return entity;
+        // 먼저 이메일로 계정이 있는지 확인 (상태 무관)
+        var existingUser = userRepository.findFirstByEmailOrderByIdDesc(email);
+        
+        if (existingUser.isPresent()) {
+            var user = existingUser.get();
+            
+            // 삭제된 계정인지 확인
+            if (user.getStatus() == UserStatus.UNREGISTERED) {
+                throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이미 삭제된 계정입니다. 다시 회원가입해주세요.");
+            }
+            
+            // 비밀번호 확인
+            if (!user.getPassword().equals(password)) {
+                throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이메일 또는 비밀번호가 올바르지 않습니다.");
+            }
+            
+            return user;
+        }
+        
+        // 계정이 없음
+        throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이메일 또는 비밀번호가 올바르지 않습니다.");
     }
 
     public UserEntity getUserWithThrow(
