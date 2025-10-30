@@ -26,24 +26,18 @@ public class UserService {
     public UserEntity register(UserEntity userEntity){
         return Optional.ofNullable(userEntity)
             .map(it -> {
-                // 동일한 이메일로 기존 계정이 있는지 확인 (삭제된 계정 포함)
-                var existingUser = userRepository.findFirstByEmailOrderByIdDesc(userEntity.getEmail());
+                // 동일한 이메일로 REGISTERED 상태인 계정이 있는지 확인
+                var existingRegisteredUser = userRepository.findFirstByEmailAndStatusOrderByIdDesc(
+                    userEntity.getEmail(),
+                    UserStatus.REGISTERED
+                );
                 
-                if (existingUser.isPresent()) {
-                    var existing = existingUser.get();
-                    
-                    // 기존 계정이 있으면 정보 업데이트 (테스트 편의성)
-                    // UNREGISTERED든 REGISTERED든 모두 업데이트
-                    existing.setStatus(UserStatus.REGISTERED);
-                    existing.setRegisteredAt(LocalDateTime.now());
-                    existing.setUnregisteredAt(null);
-                    existing.setName(userEntity.getName());
-                    existing.setPassword(userEntity.getPassword());
-                    existing.setAddress(userEntity.getAddress());
-                    return userRepository.save(existing);
+                if (existingRegisteredUser.isPresent()) {
+                    // 이미 등록된 계정이 있으면 에러
+                    throw new ApiException(UserErrorCode.USER_NOT_FOUND, "이미 등록된 이메일입니다.");
                 }
                 
-                // 신규 계정 생성
+                // 완전히 새로운 레코드 생성 (UNREGISTERED 계정이 있어도 새 레코드 생성)
                 userEntity.setStatus(UserStatus.REGISTERED);
                 userEntity.setRegisteredAt(LocalDateTime.now());
                 return userRepository.save(userEntity);
